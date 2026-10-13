@@ -12,7 +12,7 @@ public final class Comment
     private final String content;
     private final LocalDateTime createdAt;
 
-    protected Comment(
+    public Comment(
         String id,
         User author,
         String content,
