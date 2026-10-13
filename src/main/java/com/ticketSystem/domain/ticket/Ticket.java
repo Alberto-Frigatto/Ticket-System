@@ -114,6 +114,9 @@ public final class Ticket
 
     public void addComment(Comment comment)
     {
+        if (isClosed())
+            throw new IllegalStateException("Ticket is already closed.");
+
         this.comments.add(Objects.requireNonNull(comment));
     }
 
