@@ -1,4 +1,4 @@
-package com.ticketSystem.application.usecase.ticket.get;
+package com.ticketSystem.application.usecase.ticket.access;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -8,15 +8,20 @@ import com.ticketSystem.domain.ticket.Ticket;
 import com.ticketSystem.domain.user.Role;
 import com.ticketSystem.domain.user.User;
 
-public final class GetTicketAccessStrategy
+public final class TicketAccessStrategy
 {
     private static final Map<Role, Function<User, Predicate<Ticket>>> STRATEGIES = Map.of(
         Role.REQUESTER, user -> ticket -> ticket.getRequester().getId().equals(user.getId()),
-        Role.TECHNICIAN, user -> ticket -> ticket.getAssignee().getId().equals(user.getId()),
+
+        Role.TECHNICIAN,
+        user -> ticket ->
+            ticket.getAssignee() != null
+                && ticket.getAssignee().getId().equals(user.getId()),
+
         Role.ADMIN, user -> ticket -> true
     );
 
-    private GetTicketAccessStrategy() {}
+    private TicketAccessStrategy() {}
 
     public static Predicate<Ticket> getStrategy(User user)
     {
